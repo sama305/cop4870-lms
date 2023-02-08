@@ -10,7 +10,9 @@ namespace App.LMS
             List<Course> courses = new List<Course>();
             List<Person> people = new List<Person>();
 
+
             /*
+            // Demo courses (debug only)
             courses.Add(new Course("Biology I", "BSC2010", "Freshmen biology class."));
             courses.Add(new Course("Statistics", "STA1101", "Introductory statistics class."));
             courses.Add(new Course("Discrete Math", "MAD3250", "Formal logic and induction."));
@@ -23,7 +25,7 @@ namespace App.LMS
             Console.WriteLine("Type the number of the command you'd like to perform: ");
             Console.WriteLine("1. Create a course");
             Console.WriteLine("2. Create a person");
-            Console.WriteLine("3. Add a person to a course");
+            Console.WriteLine("3. Enroll a person in a course");
             Console.WriteLine("4. Remove a person from a course");
             Console.WriteLine("5. List all courses");
             Console.WriteLine("6. Search for a course");
@@ -85,18 +87,24 @@ namespace App.LMS
                         // OPTION 3: Add person to a course
                         case 3:
                             {
-                                // Picking the course
-                                Console.WriteLine("Which course would you like to add a person to?:");
-                                Course course = ChooseFromMenuList(courses);
-                                Console.WriteLine($"You have chosen {course}.");
-
                                 // Picking the person
-                                Console.WriteLine("Now, which person would you like to add?:");
+                                Console.WriteLine("Which student do you want to add a course to?:");
                                 Person person = ChooseFromMenuList(people);
 
-                                // Adding the person
-                                course.AddPerson(person);
-                                Console.WriteLine($"You have chosen to add {person} to {course}.");
+                                // Finding courses person isn't in
+                                List<Course> filteredCourses = courses
+                                    .Where(c => !c.GetRoster().Contains(person)).ToList();
+
+                                if (filteredCourses.Count() > 0)
+                                {
+                                    Console.WriteLine("Which course would you like to add?:");
+                                    Course course = ChooseFromMenuList(filteredCourses);
+
+                                    // Adding the person
+                                    course.AddPerson(person);
+                                    Console.WriteLine($"You have chosen to enroll {person} to {course}.");
+                                }
+                                else { Console.WriteLine("No availiable courses."); }
                             }
                             break;
 
@@ -191,6 +199,15 @@ namespace App.LMS
                             {
                                 Console.WriteLine("Which student's courses would you like to view?:");
                                 Person person = ChooseFromMenuList(people);
+
+                                foreach (Course c in courses)
+                                {
+                                    if (c.GetRoster().Contains(person))
+                                    {
+                                        Console.WriteLine($"{courses.IndexOf(c)+1}.\t{c}");
+                                    }
+
+                                }
                             }
                             break;
 
@@ -241,6 +258,37 @@ namespace App.LMS
 
                         // OPTION 12: Create an assignment and add to a course
                         case 12:
+                            {
+                                Console.Write("Assignment name: ");
+                                string name = Console.ReadLine() ?? string.Empty;
+                                Console.Write("Description: ");
+                                string desc = Console.ReadLine() ?? string.Empty;
+
+                                string ptsStr;
+                                uint pts;
+                                do
+                                {
+                                    Console.Write("Total points: ");
+                                    ptsStr = Console.ReadLine() ?? "0";
+                                } while (!uint.TryParse(ptsStr, out pts));
+
+                                string dueStr;
+                                DateTime dueDate;
+                                do
+                                {
+                                    Console.Write("Due date [dd/mm/yyyy hh:mm {am or pm}]:\n\t");
+                                    dueStr = Console.ReadLine() ?? DateTime.Today.ToString();
+                                } while (!DateTime.TryParse(dueStr, out dueDate));
+
+                                Assignment assignment = new Assignment(name, desc, pts, dueDate);
+
+                                Console.WriteLine($"Finally, which course would you like to add '{name}' to?:");
+                                Course course = ChooseFromMenuList(courses);
+
+                                course.AddAssignment(assignment);
+                                Console.WriteLine($"Assignment {assignment} has been added to {course}");
+
+                            }
                             break;
 
 
@@ -300,11 +348,13 @@ namespace App.LMS
         // Take a list and print each item in a formatted and numbered manner.
         private static void PrintListSelectionInterface<T>(List<T> myList)
         {
+            // Case for 0 items in the list
             if (myList.Count() == 0)
             {
                 Console.WriteLine($"No items of type '{typeof(T)}' found");
                 return;
             }
+            // Print formatted list
             for (int i = 0; i < myList.Count(); i++)
             {
                 Console.WriteLine($"{i + 1}.\t{myList[i]}");
@@ -318,12 +368,23 @@ namespace App.LMS
         {
             for (int i = 0; i < courseList.Count(); i++)
             {
+                // Name and description
                 Console.WriteLine($"{i + 1}.\tCourse name: {courseList[i]}\n\tDescription: {courseList[i].Description}\n\tPeople enrolled:");
+
+                // Student roster
                 for (int j = 0; j < courseList[i].GetRoster().Count(); j++)
                 {
                     Console.WriteLine($"\t\t{j + 1}. {courseList[i].GetRoster()[j]}");
                 }
                 if (courseList[i].GetRoster().Count() == 0) { Console.WriteLine("\t\tNone."); }
+
+                // Assignment list
+                Console.WriteLine("\tAssignments:");
+                for (int j = 0; j < courseList[i].GetAssignments().Count(); j++)
+                {
+                    Console.WriteLine($"\t\t{j + 1}. {courseList[i].GetAssignments()[j]}");
+                }
+                if (courseList[i].GetAssignments().Count() == 0) { Console.WriteLine("\t\tNone."); }
                 Console.Write("\n");
             }
         }

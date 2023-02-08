@@ -13,9 +13,10 @@ public class Course
     public string Description { get; set; }
 
     public List<Person> GetRoster()
-    {
-        return roster;
-    }
+    { return roster; }
+
+    public List<Assignment> GetAssignments()
+    { return assignments; }
 
     // constructor
     public Course(string name, string code, string description)
@@ -45,7 +46,7 @@ public class Course
         modules.Add(module);
     }
 
-    public void AddAssignment(ref Assignment assignment)
+    public void AddAssignment(Assignment assignment)
     {
         assignments.Add(assignment);
     }
