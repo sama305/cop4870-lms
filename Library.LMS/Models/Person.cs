@@ -1,11 +1,18 @@
 ﻿namespace Library.LMS.Models;
 
+public enum ClassRoles
+{
+    Student,
+    TA,
+    Instructor,
+    FacultyGeneric
+}
+
 public class Person
 {
     // fields
     private string? name;
-    private string? classification;
-    private Dictionary<Assignment, float> gradesDict;
+    private ClassRoles role;
 
     // properties
     public string Name
@@ -14,33 +21,49 @@ public class Person
         set { name = value; }
     }
 
-    public string Classification
+    public ClassRoles Role
     {
-        get { return classification ?? "NULL CLASSIFICATION"; }
-        set { classification = value; }
+        get { return role; }
+        set { role = value; }
     }
 
     // constructor
-    public Person(string name, string classification)
+    public Person(string name, ClassRoles role)
     {
         Name = name;
-        Classification = classification;
+        Role = role;
 
+    }
+
+    public override string ToString()
+    {
+        return $"{Name}, a {Role}";
+    }
+}
+
+public class Student : Person {
+    private Dictionary<Assignment, float> gradesDict;
+
+    public Student(string name)
+        : base(name, ClassRoles.Student)
+    {
         gradesDict = new Dictionary<Assignment, float>();
     }
 
-    // methods
-    void AddAssignmentGrade(ref Assignment assignment, int grade)
+    void AddAssignmentGrade(Assignment assignment, int grade)
     {
         float gradePercent = assignment.TotalPoints / grade;
         gradesDict.Add(assignment, gradePercent);
     }
+}
 
-
-
-    public override string ToString()
+public class Faculty : Person
+{
+    public Faculty(string name, ClassRoles role)
+        : base(name, role)
     {
-        return $"{Name}, a {Classification.ToLower()}";
+        if (role == ClassRoles.Student)
+            Role = ClassRoles.FacultyGeneric;
     }
 }
 

@@ -3,20 +3,17 @@
 public class Course
 {
     // fields
-    private List<Module> modules;
-    private List<Person> roster;
-    private List<Assignment> assignments;
+    public List<Module> Modules { get; set; }
+    public List<Person> Roster { get; set; }
+    public List<Assignment> Assignments;
 
     // properties
     public string Name { get; set; }
     public string Code { get; set; }
     public string Description { get; set; }
 
-    public List<Person> GetRoster()
-    { return roster; }
-
     public List<Assignment> GetAssignments()
-    { return assignments; }
+    { return Assignments; }
 
     // constructor
     public Course(string name, string code, string description)
@@ -25,30 +22,46 @@ public class Course
         Code = code;
         Description = description;
 
-        modules = new List<Module>();
-        roster = new List<Person>();
-        assignments = new List<Assignment>();
+        Modules = new List<Module>();
+        Roster = new List<Person>();
+        Assignments = new List<Assignment>();
 	}
 
     // methods
     public void AddPerson(Person person)
     {
-        roster.Add(person);
+        Roster.Add(person);
     }
 
     public void RemovePerson(Person p)
     {
-        roster.Remove(p);
+        Roster.Remove(p);
     }
 
+
+    // CRUD for module
     public void AddModule(Module module)
     {
-        modules.Add(module);
+        Modules.Add(module);
     }
+
+    public void UpdateModule(Module module, string? name =null, string? desc=null)
+    {
+        module.Name = name ?? module.Name;
+        module.Desc = desc ?? module.Desc;
+    }
+
+    public void RemoveModule(Module module)
+    {
+        Modules.Remove(module);
+    }
+
+
+
 
     public void AddAssignment(Assignment assignment)
     {
-        assignments.Add(assignment);
+        Assignments.Add(assignment);
     }
 
     public override string ToString()

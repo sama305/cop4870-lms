@@ -18,5 +18,12 @@ public class Module
 		Desc = desc;
 		Contents = new List<ContentItem>();
 	}
+
+	public Module(Module prevModule)
+	{
+		Name = prevModule.Name;
+		Desc = prevModule.Desc;
+		Contents = prevModule.Contents;
+	}
 }
 

@@ -5,21 +5,10 @@ namespace App.LMS
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
-            List<Course> courses = new List<Course>();
-            List<Person> people = new List<Person>();
-
-
-            /*
-            // Demo courses (debug only)
-            courses.Add(new Course("Biology I", "BSC2010", "Freshmen biology class."));
-            courses.Add(new Course("Statistics", "STA1101", "Introductory statistics class."));
-            courses.Add(new Course("Discrete Math", "MAD3250", "Formal logic and induction."));
-            courses.Add(new Course("Physical Nutrition", "PHY2220", "Nutritional analysis and discourse."));
-            courses.Add(new Course("Biology I Lab", "BSC2010L", "Lab component of BSC2010."));
-            courses.Add(new Course("Popular Music", "IDS3100", "History of American popular music."));
-            */
+            LMSService svc = new LMSService();
 
             // Listing commands
             Console.WriteLine("Type the number of the command you'd like to perform: ");
@@ -31,7 +20,7 @@ namespace App.LMS
             Console.WriteLine("6. Search for a course");
             Console.WriteLine("7. List all people");
             Console.WriteLine("8. Search for a person");
-            Console.WriteLine("9. List a person's courses");
+            Console.WriteLine("9. List a person's svc.Courses");
             Console.WriteLine("10. Update a course");
             Console.WriteLine("11. Update a person");
             Console.WriteLine("12. Create an assignment and add to a course");
@@ -62,8 +51,8 @@ namespace App.LMS
                                 var desc = Console.ReadLine();
 
                                 // Adding the course to the master list
-                                AddCourse(courses, name, code, desc);
-                                Console.WriteLine($"Course '{courses.Last()}' has been added.");
+                                svc.AddCourse(name, code, desc);
+                                Console.WriteLine($"Course '{svc.Courses.Last()}' has been added.");
                             }
                             break;
 
@@ -74,12 +63,17 @@ namespace App.LMS
                                 // Choosing fields for the person
                                 Console.Write("Name: ");
                                 var name = Console.ReadLine();
-                                Console.Write("Classification: ");
-                                var classification = Console.ReadLine();
-
-                                // Adding the person to the master list
-                                AddPerson(people, name, classification);
-                                Console.WriteLine($"{people.Last()}, has been created.");
+                                Console.Write("Class Role: ");
+                                if (Enum.TryParse(Console.ReadLine(), out ClassRoles roleCnvt))
+                                {
+                                    // Adding the person to the master list
+                                    svc.AddPerson(name, roleCnvt);
+                                    Console.WriteLine($"{svc.People.Last()}, has been created.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Role {roleCnvt} not found");
+                                }
                             }
                             break;
 
@@ -89,11 +83,11 @@ namespace App.LMS
                             {
                                 // Picking the person
                                 Console.WriteLine("Which student do you want to add a course to?:");
-                                Person person = ChooseFromMenuList(people);
+                                Person person = ChooseFromMenuList(svc.People);
 
-                                // Finding courses person isn't in
-                                List<Course> filteredCourses = courses
-                                    .Where(c => !c.GetRoster().Contains(person)).ToList();
+                                // Finding svc.Courses person isn't in
+                                List<Course> filteredCourses = svc.Courses
+                                    .Where(c => !c.Roster.Contains(person)).ToList();
 
                                 if (filteredCourses.Count() > 0)
                                 {
@@ -104,7 +98,7 @@ namespace App.LMS
                                     course.AddPerson(person);
                                     Console.WriteLine($"You have chosen to enroll {person} to {course}.");
                                 }
-                                else { Console.WriteLine("No availiable courses."); }
+                                else { Console.WriteLine("No availiable svc.Courses."); }
                             }
                             break;
 
@@ -114,12 +108,12 @@ namespace App.LMS
                             {
                                 // Selecting the course
                                 Console.WriteLine("Select the course to remove a person from:");
-                                Course course = ChooseFromMenuList(courses);
+                                Course course = ChooseFromMenuList(svc.Courses);
                                 Console.WriteLine($"You have chosen {course}");
 
                                 // Selecting the person
                                 Console.WriteLine($"Now, which student would you like to remove?:");
-                                Person person = ChooseFromMenuList(course.GetRoster());
+                                Person person = ChooseFromMenuList(course.Roster);
 
                                 // Removing the person from the course
                                 Console.WriteLine($"You have chosen to remove {person} from {course}");
@@ -129,10 +123,10 @@ namespace App.LMS
                             break;
 
 
-                        // OPTION 5: List all courses
+                        // OPTION 5: List all svc.Courses
                         case 5:
                             // Simple function call
-                            PrintCoursesDetailed(courses);
+                            PrintCoursesDetailed(svc.Courses);
                             break;
 
 
@@ -143,8 +137,8 @@ namespace App.LMS
                                 Console.Write("Please enter a course search term: ");
                                 var searchTerm = Console.ReadLine();
 
-                                // Searching for all courses that contain 'searchTerm'
-                                IEnumerable<Course> foundCourses = courses
+                                // Searching for all svc.Courses that contain 'searchTerm'
+                                IEnumerable<Course> foundCourses = svc.Courses
                                     .Where(c => c.Name.Contains(searchTerm, StringComparison.InvariantCultureIgnoreCase) ||
                                                 c.Description.Contains(searchTerm, StringComparison.InvariantCultureIgnoreCase) ||
                                                 c.Code.Contains(searchTerm, StringComparison.InvariantCultureIgnoreCase));
@@ -162,10 +156,10 @@ namespace App.LMS
                             break;
 
 
-                        // OPTION 7: List all people
+                        // OPTION 7: List all svc.People
                         case 7:
                             // Simple function call
-                            PrintListSelectionInterface(people);
+                            PrintListSelectionInterface(svc.People);
                             break;
 
 
@@ -176,10 +170,10 @@ namespace App.LMS
                                 Console.Write("Please enter a course search term: ");
                                 var searchTerm = Console.ReadLine();
 
-                                // Searching for all people that contain 'searchTerm'
-                                IEnumerable<Person> foundPeople = people
+                                // Searching for all svc.People that contain 'searchTerm'
+                                IEnumerable<Person> foundPeople = svc.People
                                     .Where(p => p.Name.Contains(searchTerm, StringComparison.InvariantCultureIgnoreCase) ||
-                                                p.Classification.Contains(searchTerm, StringComparison.InvariantCultureIgnoreCase));
+                                                p.Role.ToString().Contains(searchTerm, StringComparison.InvariantCultureIgnoreCase));
 
                                 List<Person> result = foundPeople.ToList(); // Converting IEnumerable to List
 
@@ -194,17 +188,17 @@ namespace App.LMS
                             break;
 
 
-                        // OPTION 9: List a person's courses
+                        // OPTION 9: List a person's svc.Courses
                         case 9:
                             {
-                                Console.WriteLine("Which student's courses would you like to view?:");
-                                Person person = ChooseFromMenuList(people);
+                                Console.WriteLine("Which student's svc.Courses would you like to view?:");
+                                Person person = ChooseFromMenuList(svc.People);
 
-                                foreach (Course c in courses)
+                                foreach (Course c in svc.Courses)
                                 {
-                                    if (c.GetRoster().Contains(person))
+                                    if (c.Roster.Contains(person))
                                     {
-                                        Console.WriteLine($"{courses.IndexOf(c)+1}.\t{c}");
+                                        Console.WriteLine($"{svc.Courses.IndexOf(c)+1}.\t{c}");
                                     }
 
                                 }
@@ -217,7 +211,7 @@ namespace App.LMS
                             {
                                 // Selecting the course
                                 Console.Write("Which course to update?: ");
-                                Course course = ChooseFromMenuList(courses);
+                                Course course = ChooseFromMenuList(svc.Courses);
                                 Console.WriteLine($"You have chosen to update {course}.");
 
                                 // Course's fields
@@ -229,7 +223,7 @@ namespace App.LMS
                                 var desc = Console.ReadLine();
 
                                 // Updating the course
-                                UpdateCourse(course, name, code, desc);
+                                svc.UpdateCourse(course, name, code, desc);
                                 Console.WriteLine($"Course '{course}' has been update.");
                             }
                             break;
@@ -240,18 +234,19 @@ namespace App.LMS
                             {
                                 // Selecting the person
                                 Console.WriteLine("Which person to update?: ");
-                                Person person = ChooseFromMenuList(people);
+                                Person person = ChooseFromMenuList(svc.People);
                                 Console.WriteLine($"You have chosen to update {person}.");
 
                                 // Person's fields
                                 Console.Write("Name: ");
                                 var name = Console.ReadLine();
-                                Console.Write("Classification: ");
-                                var _class = Console.ReadLine();
-
-                                // Updating the person
-                                UpdatePerson(person, name, _class);
-                                Console.WriteLine($"{person} has been updated.");
+                                Console.Write("Class Role: ");
+                                if (Enum.TryParse(Console.ReadLine(), out ClassRoles roleCnvt))
+                                {
+                                    // Updating the person
+                                    svc.UpdatePerson(person, name, roleCnvt);
+                                    Console.WriteLine($"{person} has been updated.");
+                                }
                             }
                             break;
 
@@ -283,7 +278,7 @@ namespace App.LMS
                                 Assignment assignment = new Assignment(name, desc, pts, dueDate);
 
                                 Console.WriteLine($"Finally, which course would you like to add '{name}' to?:");
-                                Course course = ChooseFromMenuList(courses);
+                                Course course = ChooseFromMenuList(svc.Courses);
 
                                 course.AddAssignment(assignment);
                                 Console.WriteLine($"Assignment {assignment} has been added to {course}");
@@ -309,41 +304,6 @@ namespace App.LMS
         //      FUNCTIONS
         // ===================
 
-        // <-- AddCourse -->
-        // Adds a course with specified name, code, and description to a list.
-        private static Course AddCourse(List<Course> cl, string name, string code, string desc)
-        {
-            cl.Add(new Course(name, code, desc));
-            return cl.Last();
-        }
-
-        // <-- UpdateCourse -->
-        // Update a course with new desired values.
-        private static Course UpdateCourse(Course c, string name, string code, string desc)
-        {
-            c.Name = name;
-            c.Code = code;
-            c.Description = desc;
-            return c;
-        }
-
-        // <-- AddPerson -->
-        // Adds a person with specified name and classification to a list.
-        private static Person AddPerson(List<Person> pl, string name, string classification)
-        {
-            pl.Add(new Person(name, classification));
-            return pl.Last();
-        }
-
-        // <-- UpdatePerson -->
-        // Update a person with new desired values.
-        private static Person UpdatePerson(Person p, string name, string _class)
-        {
-            p.Name = name;
-            p.Classification = _class;
-            return p;
-        }
-
         // <-- PrintListSelectionInterface -->
         // Take a list and print each item in a formatted and numbered manner.
         private static void PrintListSelectionInterface<T>(List<T> myList)
@@ -361,22 +321,22 @@ namespace App.LMS
             }
         }
 
-        // <-- PrintCoursesDetailed -->
-        // Special function that prints more detailed info on courses such as
+        // <-- Printsvc.CoursesDetailed -->
+        // Special function that prints more detailed info on svc.Courses such as
         // its description and students.
         private static void PrintCoursesDetailed(List<Course> courseList)
         {
             for (int i = 0; i < courseList.Count(); i++)
             {
                 // Name and description
-                Console.WriteLine($"{i + 1}.\tCourse name: {courseList[i]}\n\tDescription: {courseList[i].Description}\n\tPeople enrolled:");
+                Console.WriteLine($"{i + 1}.\tCourse name: {courseList[i]}\n\tDescription: {courseList[i].Description}\n\tsvc.People enrolled:");
 
-                // Student roster
-                for (int j = 0; j < courseList[i].GetRoster().Count(); j++)
+                // Student Roster
+                for (int j = 0; j < courseList[i].Roster.Count(); j++)
                 {
-                    Console.WriteLine($"\t\t{j + 1}. {courseList[i].GetRoster()[j]}");
+                    Console.WriteLine($"\t\t{j + 1}. {courseList[i].Roster[j]}");
                 }
-                if (courseList[i].GetRoster().Count() == 0) { Console.WriteLine("\t\tNone."); }
+                if (courseList[i].Roster.Count() == 0) { Console.WriteLine("\t\tNone."); }
 
                 // Assignment list
                 Console.WriteLine("\tAssignments:");
