@@ -56,9 +56,6 @@ public class Course
         Modules.Remove(module);
     }
 
-
-
-
     public void AddAssignment(Assignment assignment)
     {
         Assignments.Add(assignment);

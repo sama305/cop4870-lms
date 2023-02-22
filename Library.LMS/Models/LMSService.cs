@@ -5,17 +5,14 @@ namespace Library.LMS.Models
     {
         public List<Course> Courses;
         public List<Person> People;
-        public List<List<Assignment>> AssignmentGroups;
+        public List<Tuple<string, List<Assignment>>> AssignmentGroups;
 
         public LMSService()
         {
             Courses = new List<Course>();
             People = new List<Person>();
-            AssignmentGroups = new List<List<Assignment>>();
+            AssignmentGroups = new List< Tuple< string, List<Assignment> > >();
         }
-
-
-
 
 
         // Class Methods
@@ -51,7 +48,16 @@ namespace Library.LMS.Models
             return p;
         }
 
+        public void AddAssignmentGroup(string name)
+        {
+            AssignmentGroups
+                .Add(new Tuple<string, List<Assignment> >(name, new List<Assignment>()));
+        }
 
+        public void AddAssignmentToGroup(string name, Assignment a)
+        {
+            AssignmentGroups.Find(m => m.Item1.Equals(name)).Item2.Add(a);
+        }
     }
 }
 

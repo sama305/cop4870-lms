@@ -1,0 +1,6 @@
+﻿TODO - project 2 as of 2/19/23
+
+1. Add CRUD for modules
+2. Add grading of an assignment
+3. Add averages for assignment groups
+4. etc.
