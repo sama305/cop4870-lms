@@ -42,18 +42,18 @@ public class Person
 }
 
 public class Student : Person {
-    private Dictionary<Assignment, float> gradesDict;
+    public Dictionary<Assignment, float> GradesDict { get; }
 
     public Student(string name)
         : base(name, ClassRoles.Student)
     {
-        gradesDict = new Dictionary<Assignment, float>();
+        GradesDict = new Dictionary<Assignment, float>();
     }
 
-    void AddAssignmentGrade(Assignment assignment, int grade)
+    public void AddAssignmentGrade(Assignment assignment, int grade)
     {
         float gradePercent = assignment.TotalPoints / grade;
-        gradesDict.Add(assignment, gradePercent);
+        GradesDict.Add(assignment, gradePercent);
     }
 }
 

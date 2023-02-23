@@ -19,6 +19,7 @@ namespace Library.LMS.Models
 		// private constructor for children
 		private Node(Node p, string d)
         {
+			Parent = p;
             Children = new List<Node>();
 			Data = d;
         }
@@ -39,6 +40,7 @@ namespace Library.LMS.Models
 		}
 	}
 
+	// TODO: make strings in a seperate class/functions
 	public class DialogueTree
 	{
 		public Node RootNode { get; set; }
@@ -64,31 +66,41 @@ namespace Library.LMS.Models
 
         public Node chooseChildFromMenu(Node? p = null, bool inclParent = false)
         {
-			if (p.Parent == null) { inclParent = false; }
-			var length = p.Children.Count() + ((inclParent) ? 1 : 0);
+            var length = p.Children.Count() + ((inclParent) ? 1 : 0);
             if (p == null) { p = CurrentNode; }
 
+
+            if (p.Parent == null)
+			{
+				Console.WriteLine("===== Main Menu =====\n");
+				inclParent = false;
+			}
+			else
+			{
+                Console.WriteLine("===== " + p.Data +" =====\n");
+            }
             displayChildren(p, true);
 			if (inclParent) { Console.WriteLine(length + ".\tBack"); }
 			while (true)
-			{
-				Console.Write(">> ");
+            {
+                Console.Write(">> ");
 				if (int.TryParse(Console.ReadLine(), out int select))
 				{
 					--select;
 					if (select < length && select >= 0)
                     {
-						if (select == length) { return p.Parent; }
+						if (inclParent && select == length-1) { return p.Parent; }
                         return p.Children[select];
                     }
 				}
 			}
 		}
 
-		public Node goUp()
+		// return itself to allow chaining
+		public DialogueTree goUp()
 		{
             CurrentNode = CurrentNode.Parent ?? CurrentNode;
-			return CurrentNode;
+			return this;
 		}
 	}
 }

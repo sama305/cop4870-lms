@@ -19,11 +19,9 @@ public class Module
 		Contents = new List<ContentItem>();
 	}
 
-	public Module(Module prevModule)
-	{
-		Name = prevModule.Name;
-		Desc = prevModule.Desc;
-		Contents = prevModule.Contents;
-	}
+    public override string ToString()
+    {
+        return $"{Name}";
+    }
 }
 

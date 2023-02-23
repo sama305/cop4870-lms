@@ -5,14 +5,12 @@ public class ContentItem
     // properties
     public string Name { get; set; }
     public string Desc { get; set; }
-    public string Path { get; set; }
 
     // constructor
     public ContentItem(string name, string desc, string path)
 	{
         Name = name;
         Desc = desc;
-        Path = path;
 	}
 }
 

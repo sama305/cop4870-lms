@@ -5,7 +5,7 @@ public class Course
     // fields
     public List<Module> Modules { get; set; }
     public List<Person> Roster { get; set; }
-    public List<Assignment> Assignments;
+    public List<Assignment> Assignments { get; set; }
 
     // properties
     public string Name { get; set; }

@@ -33,10 +33,33 @@ namespace Library.LMS.Models
             return c;
         }
 
+        // <-- RemoveCourse -->
+        public void RemoveCourse(Course c)
+        {
+            c.Assignments.Clear();
+            c.Modules.Clear();
+            c.Roster.ForEach(p => {
+                if (p.GetType() == typeof(Student))
+                    (p as Student).GradesDict.Clear();
+            });
+            Courses.Remove(c);
+        }
+
         // <-- AddPerson -->
         public Person AddPerson(string name, ClassRoles role)
         {
-            People.Add(new Person(name, role));
+            Person p = new Person(name, role);
+            switch (role)
+            {
+                case ClassRoles.Student:
+                    p = new Student(name);
+                    break;
+                case ClassRoles.TA:
+                case ClassRoles.Instructor:
+                    p = new Faculty(name, role);
+                    break;
+            }
+            People.Add(p);
             return People.Last();
         }
 
@@ -46,6 +69,19 @@ namespace Library.LMS.Models
             p.Name = name;
             p.Role = role;
             return p;
+        }
+
+        public void RemovePerson(Person p)
+        {
+            foreach(Course c in Courses)
+            {
+                if (c.Roster.Contains(p))
+                {
+                    c.Roster.Remove(p);
+                }
+            }
+            // TODO: determine if you need to remove grades
+            People.Remove(p);
         }
 
         public void AddAssignmentGroup(string name)
