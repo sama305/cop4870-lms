@@ -7,11 +7,16 @@ public class ContentItem
     public string Desc { get; set; }
 
     // constructor
-    public ContentItem(string name, string desc, string path)
+    public ContentItem(string name, string desc)
 	{
         Name = name;
         Desc = desc;
 	}
+
+    public override string ToString()
+    {
+        return $"{Name} (content)";
+    }
 }
 
 
@@ -20,10 +25,15 @@ public class PageItem : ContentItem
 {
     public string HTMLBody { get; set; }
 
-    public PageItem(string hb, string name, string desc, string path)
-        : base(name, desc, path)
+    public PageItem(string hb, string name, string desc)
+        : base(name, desc)
     {
         HTMLBody = hb;
+    }
+
+    public override string ToString()
+    {
+        return $"{Name} (page)";
     }
 }
 
@@ -33,10 +43,15 @@ public class AssignmentItem : ContentItem
 {
     public Assignment Assigned { get; set; }
 
-    public AssignmentItem(Assignment assigned, string name, string desc, string path)
-        : base(name, desc, path)
+    public AssignmentItem(Assignment assigned, string name, string desc)
+        : base(name, desc)
     {
         Assigned = assigned;
+    }
+
+    public override string ToString()
+    {
+        return $"{Name} (assignment)";
     }
 }
 
@@ -46,9 +61,14 @@ public class FileItem : ContentItem
 {
     public string FilePath { get; set; }
 
-    public FileItem(string filePath, string name, string desc, string path)
-        : base(name, desc, path)
+    public FileItem(string filePath, string name, string desc)
+        : base(name, desc)
     {
         FilePath = filePath;
+    }
+
+    public override string ToString()
+    {
+        return $"{Name} (file)";
     }
 }

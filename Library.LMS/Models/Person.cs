@@ -13,6 +13,7 @@ public class Person
     // fields
     private string? name;
     private ClassRoles role;
+    public int ID { get; }
 
     // properties
     public string Name
@@ -28,39 +29,55 @@ public class Person
     }
 
     // constructor
-    public Person(string name, ClassRoles role)
+    public Person(string name, ClassRoles role, int id)
     {
         Name = name;
         Role = role;
-
+        ID = id;
     }
 
     public override string ToString()
     {
-        return $"{Name}, a {Role}";
+        return $"{Name}, a {Role} (id:{ID})";
     }
 }
 
 public class Student : Person {
-    public Dictionary<Assignment, float> GradesDict { get; }
+    public Dictionary<Assignment, double> AssignmentsDict { get; }
+    //public Dictionary<Course, double> GradesDict { get;  }
 
-    public Student(string name)
-        : base(name, ClassRoles.Student)
+    public Student(string name, int id)
+        : base(name, ClassRoles.Student, id)
     {
-        GradesDict = new Dictionary<Assignment, float>();
+        AssignmentsDict = new Dictionary<Assignment, double>();
+        //GradesDict = new Dictionary<Course, double>();
     }
 
     public void AddAssignmentGrade(Assignment assignment, int grade)
     {
-        float gradePercent = assignment.TotalPoints / grade;
-        GradesDict.Add(assignment, gradePercent);
+        // Normalize the grade to be in terms of 100%
+        double gradeRatio = (double)grade / assignment.TotalPoints * 100;
+
+        try
+        {
+            AssignmentsDict.Add(assignment, grade);
+        }
+        catch (ArgumentException)
+        {
+            return;
+        }
+    }
+
+    public override string ToString()
+    {
+        return $"{Name}, a {Role} (id:{ID})";
     }
 }
 
 public class Faculty : Person
 {
-    public Faculty(string name, ClassRoles role)
-        : base(name, role)
+    public Faculty(string name, ClassRoles role, int id)
+        : base(name, role, id)
     {
         if (role == ClassRoles.Student)
             Role = ClassRoles.FacultyGeneric;
