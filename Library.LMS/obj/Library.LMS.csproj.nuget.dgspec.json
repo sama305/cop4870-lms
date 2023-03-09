@@ -1,31 +1,37 @@
 {
   "format": 1,
   "restore": {
-    "/Users/sam-morgan/fsu-files/sp23/cop4700/my_files/LMS/Library.LMS/Library.LMS.csproj": {}
+    "C:\\Users\\ander\\source\\repos\\sama305\\cop4870-lms\\Library.LMS\\Library.LMS.csproj": {}
   },
   "projects": {
-    "/Users/sam-morgan/fsu-files/sp23/cop4700/my_files/LMS/Library.LMS/Library.LMS.csproj": {
+    "C:\\Users\\ander\\source\\repos\\sama305\\cop4870-lms\\Library.LMS\\Library.LMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/sam-morgan/fsu-files/sp23/cop4700/my_files/LMS/Library.LMS/Library.LMS.csproj",
+        "projectUniqueName": "C:\\Users\\ander\\source\\repos\\sama305\\cop4870-lms\\Library.LMS\\Library.LMS.csproj",
         "projectName": "Library.LMS",
-        "projectPath": "/Users/sam-morgan/fsu-files/sp23/cop4700/my_files/LMS/Library.LMS/Library.LMS.csproj",
-        "packagesPath": "/Users/sam-morgan/.nuget/packages/",
-        "outputPath": "/Users/sam-morgan/fsu-files/sp23/cop4700/my_files/LMS/Library.LMS/obj/",
+        "projectPath": "C:\\Users\\ander\\source\\repos\\sama305\\cop4870-lms\\Library.LMS\\Library.LMS.csproj",
+        "packagesPath": "C:\\Users\\ander\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ander\\source\\repos\\sama305\\cop4870-lms\\Library.LMS\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/sam-morgan/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\ander\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "netstandard2.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "netstandard2.0": {
+            "targetAlias": "netstandard2.0",
             "projectReferences": {}
           }
         },
@@ -36,8 +42,16 @@
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "netstandard2.0": {
+          "targetAlias": "netstandard2.0",
+          "dependencies": {
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -49,12 +63,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.102/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "ZBHt5EGLkeNy5ldXLIKmao9JXe2Srcw9iQdvzN5u0AhOJ8YC82yH8zhtFJHN37vTvFbfJ3ckbFbRrzGVbf6pAQ==",
+  "dgSpecHash": "dJalG5PEw8Yz9dWWKvium4AIiPIVoj1B/NlbSJZHG9XWyLcpr6YAcVF0GhKVthFFj0/lR/eh9cw7r3MnGmHOOA==",
   "success": true,
-  "projectFilePath": "/Users/sam-morgan/fsu-files/sp23/cop4700/my_files/LMS/Library.LMS/Library.LMS.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\ander\\source\\repos\\sama305\\cop4870-lms\\Library.LMS\\Library.LMS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ander\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\ander\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
